@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café Aurora — Café, pão quente e conversa boa</title>
+<meta name="description" content="Cafeteria de bairro com café coado, pão na chapa e doces caseiros. Aberta todo dia no Jardim Acácias.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Work+Sans:wght@400;500;600;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wall: #FBF3E7;
+    --wall-2: #F3E4CE;
+    --tile: #C1613D;
+    --tile-dark: #9C4A2E;
+    --mustard: #E3A73B;
+    --wood: #3B2A1E;
+    --wood-2: #2C1F16;
+    --sage: #7C8C63;
+    --ink: #2C1F16;
+    --ink-soft: #6B5847;
+    --cream-text: #FBF3E7;
+    --radius: 6px;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background: var(--wall);
+    color: var(--ink);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.6;
+  }
+  h1,h2,h3{
+    font-family:'DM Serif Display', serif;
+    font-weight:400;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .script{ font-family:'Caveat', cursive; }
+  a{ color:inherit; text-decoration:none; }
+  img,svg{ display:block; max-width:100%; }
+  button{ font-family:inherit; cursor:pointer; }
+  .wrap{ max-width:1120px; margin:0 auto; padding:0 28px; }
+  .eyebrow{
+    font-size:0.78rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color: var(--tile-dark);
+    font-weight:600;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{ content:""; width:20px; height:2px; background: var(--mustard); }
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background: rgba(59,42,30,0.96);
+    border-bottom: 3px solid var(--mustard);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px; max-width:1120px; margin:0 auto;
+  }
+  .logo{
+    font-family:'DM Serif Display', serif;
+    font-size:1.5rem;
+    color: var(--cream-text);
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo svg{ width:26px; height:26px; }
+  .nav-links{ display:flex; gap:30px; list-style:none; margin:0; padding:0; color: var(--wall-2); font-size:0.94rem; }
+  .nav-links a{ opacity:0.88; transition:opacity .2s; }
+  .nav-links a:hover{ opacity:1; color: var(--mustard); }
+  .nav-cta{
+    background: var(--tile);
+    color: var(--cream-text);
+    border:none; padding:10px 20px; border-radius: var(--radius);
+    font-weight:600; font-size:0.88rem;
+  }
+  .nav-toggle{ display:none; background:none; border:none; color:var(--cream-text); font-size:1.6rem; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:
+      radial-gradient(ellipse 700px 400px at 15% 0%, rgba(227,167,59,0.16), transparent),
+      var(--wall);
+    padding: 84px 0 60px;
+  }
+  .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:50px; align-items:center; }
+  .hero h1{ font-size:clamp(2.3rem,4vw,3.3rem); line-height:1.12; margin:16px 0 20px; }
+  .hero h1 i{ color: var(--tile); font-style:italic; }
+  .hero p.lead{ color: var(--ink-soft); font-size:1.08rem; max-width:44ch; margin-bottom:28px; }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+  .btn-primary{
+    background: var(--tile); color: var(--cream-text); border:none;
+    padding:14px 26px; border-radius: var(--radius); font-weight:600; font-size:0.98rem;
+    transition: background .2s, transform .2s;
+  }
+  .btn-primary:hover{ background: var(--tile-dark); transform: translateY(-1px); }
+  .btn-ghost{
+    background:transparent; color: var(--ink); border:1.5px solid var(--wood);
+    padding:13px 24px; border-radius: var(--radius); font-weight:600; font-size:0.98rem;
+  }
+  .open-badge{
+    display:flex; align-items:center; gap:8px;
+    font-size:0.85rem; font-weight:600; color: var(--ink-soft);
+  }
+  .open-badge .dot{ width:9px; height:9px; border-radius:50%; background:#8a9a6e; }
+  .open-badge.closed .dot{ background:#b45340; }
+
+  /* hero visual */
+  .hero-visual{ position:relative; height:400px; }
+  .cafe-scene{ position:absolute; inset:0; }
+  .chalk-card{
+    position:absolute; left:6px; bottom:20px; width:210px;
+    background: var(--wood); color: var(--cream-text);
+    padding:20px 20px 18px; border-radius:5px;
+    box-shadow: 0 18px 36px rgba(44,31,22,0.35);
+    transform: rotate(-3deg);
+    border: 2px solid #4a3524;
+  }
+  .chalk-card .pin{
+    position:absolute; top:-9px; left:50%; transform:translateX(-50%);
+    width:16px; height:16px; border-radius:50%; background: var(--mustard);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+  }
+  .chalk-card h4{
+    font-family:'Caveat', cursive; font-size:1.5rem; margin:6px 0 10px; color: var(--mustard);
+  }
+  .chalk-card ul{ list-style:none; margin:0; padding:0; font-size:0.86rem; }
+  .chalk-card li{ padding:5px 0; border-top:1px dashed rgba(251,243,231,0.2); display:flex; justify-content:space-between; }
+  .chalk-card li:first-child{ border-top:none; }
+
+  /* ---------- SOBRE ---------- */
+  section{ padding: 88px 0; }
+  .section-head{ max-width:600px; margin-bottom:44px; }
+  .section-head h2{ font-size:clamp(1.7rem,3vw,2.3rem); margin-top:12px; }
+  .section-head p{ color: var(--ink-soft); margin-top:12px; font-size:1.02rem; }
+
+  .sobre{ background: var(--wall-2); }
+  .sobre-grid{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; }
+  .sobre-art{ aspect-ratio:4/3.2; border-radius:8px; overflow:hidden; background: var(--wood); position:relative; }
+  .sobre-text p{ color: var(--ink); font-size:1.02rem; margin:0 0 16px; }
+  .sobre-tags{ display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
+  .tag{
+    font-size:0.76rem; font-weight:600; text-transform:uppercase; letter-spacing:0.03em;
+    padding:7px 13px; border-radius:20px; border:1.5px solid var(--sage); color:var(--sage);
+  }
+
+  /* ---------- CARDAPIO ---------- */
+  .cardapio{ background: var(--wall); }
+  .menu-cols{ display:grid; grid-template-columns:repeat(3,1fr); gap:36px; }
+  .menu-col h3{
+    font-size:1.25rem; color: var(--tile-dark); margin-bottom:18px;
+    padding-bottom:10px; border-bottom:2px solid var(--mustard);
+  }
+  .menu-item{ display:flex; justify-content:space-between; gap:12px; padding:11px 0; border-bottom:1px dashed rgba(44,31,22,0.15); }
+  .menu-item:last-child{ border-bottom:none; }
+  .menu-item .name{ font-weight:600; font-size:0.96rem; }
+  .menu-item .desc{ display:block; font-size:0.82rem; color: var(--ink-soft); font-weight:400; margin-top:2px; }
+  .menu-item .price{ font-family:'DM Serif Display', serif; color: var(--tile); font-size:1.05rem; white-space:nowrap; }
+
+  /* ---------- HORARIO / LOCAL ---------- */
+  .horario{ background: var(--wood); color: var(--cream-text); }
+  .horario .section-head p{ color: var(--wall-2); }
+  .horario-grid{ display:grid; grid-template-columns:1fr 1fr; gap:50px; }
+  .hours-board{
+    background: var(--wood-2); border-radius:8px; padding:30px 32px;
+    border:2px solid rgba(227,167,59,0.3);
+  }
+  .hours-row{ display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(251,243,231,0.1); font-size:0.96rem; }
+  .hours-row:last-child{ border-bottom:none; }
+  .hours-row .day{ color: var(--wall-2); }
+  .hours-row .time{ font-weight:600; color: var(--mustard); }
+  .local-card{
+    background: var(--wood-2); border-radius:8px; padding:30px 32px;
+    border:2px solid rgba(227,167,59,0.3);
+    display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .local-card address{ font-style:normal; font-size:1.02rem; line-height:1.7; margin-bottom:22px; color: var(--wall-2); }
+  .local-card address b{ display:block; color: var(--cream-text); font-size:1.15rem; font-family:'DM Serif Display', serif; margin-bottom:6px; }
+
+  /* ---------- DEPOIMENTOS ---------- */
+  .depoimentos{ background: var(--wall-2); }
+  .testi-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; }
+  .testi{
+    background: var(--wall); padding:28px 26px; border-radius:8px;
+    border:1px solid rgba(44,31,22,0.08);
+  }
+  .testi p{ font-size:1.02rem; margin:0 0 16px; font-style:italic; }
+  .testi .who{ font-size:0.85rem; color: var(--ink-soft); font-weight:600; }
+
+  /* ---------- CTA final ---------- */
+  .cta-final{ background: var(--tile); color: var(--cream-text); text-align:center; padding:76px 0; }
+  .cta-final h2{ font-size:clamp(1.8rem,3.2vw,2.4rem); margin-bottom:14px; }
+  .cta-final p{ color: rgba(251,243,231,0.88); margin-bottom:28px; }
+  .cta-final .btn-primary{ background: var(--wood); }
+  .cta-final .btn-primary:hover{ background: var(--wood-2); }
+
+  /* ---------- FOOTER ---------- */
+  footer{ background: var(--wood-2); color: var(--wall-2); padding:46px 0 24px; }
+  .footer-grid{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:28px; padding-bottom:26px; border-bottom:1px solid rgba(251,243,231,0.1); }
+  .footer-brand .logo{ margin-bottom:10px; color: var(--cream-text); }
+  .footer-brand p{ font-size:0.87rem; max-width:32ch; color: rgba(251,243,231,0.55); }
+  .footer-col h4{ font-size:0.74rem; letter-spacing:0.1em; text-transform:uppercase; color: var(--mustard); margin-bottom:12px; }
+  .footer-col ul{ list-style:none; padding:0; margin:0; }
+  .footer-col li{ margin-bottom:8px; font-size:0.87rem; }
+  .footer-col a{ color: rgba(251,243,231,0.75); }
+  .footer-bottom{ display:flex; justify-content:space-between; align-items:center; padding-top:20px; font-size:0.76rem; color: rgba(251,243,231,0.4); flex-wrap:wrap; gap:10px; }
+  .footer-bottom .badge{ border:1px solid rgba(251,243,231,0.2); padding:5px 10px; border-radius:20px; font-size:0.72rem; }
+
+  .reveal{ opacity:0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+
+  @media (max-width:900px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-visual{ height:300px; order:-1; }
+    .sobre-grid{ grid-template-columns:1fr; }
+    .menu-cols{ grid-template-columns:1fr; }
+    .horario-grid{ grid-template-columns:1fr; }
+    .testi-grid{ grid-template-columns:1fr; }
+  }
+  @media (max-width:700px){
+    .nav-links{ display:none; }
+    .nav-toggle{ display:block; }
+    .nav-cta{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a href="https://github.com/JuIsabelle" class="logo">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 9h13a3 3 0 0 1 0 6h-1M4 9v7a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4v-1M4 9V6h11v3" stroke="#E3A73B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Café Aurora
+    </a>
+    <ul class="nav-links">
+      <li><a href="https://github.com/JuIsabelle">Sobre</a></li>
+      <li><a href="https://github.com/JuIsabelle">Cardápio</a></li>
+      <li><a href="https://github.com/JuIsabelle">Horário &amp; local</a></li>
+    </ul>
+    <button class="nav-cta">Fazer reserva</button>
+    <button class="nav-toggle" aria-label="Abrir menu">☰</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Jardim Acácias · desde 2019</span>
+      <h1>Café coado, pão quente e uma mesa <i>de esquina</i> pra você.</h1>
+      <p class="lead">Cafeteria de bairro aberta todos os dias, com café torrado na região, pães e doces feitos na cozinha da casa. Fica logo ali na esquina — vem tomar um café com a gente.</p>
+      <div class="hero-actions">
+        <button class="btn-primary">Fazer reserva</button>
+        <a href="https://github.com/JuIsabelle"><button class="btn-ghost">Ver cardápio</button></a>
+        <span class="open-badge" id="openBadge"><span class="dot"></span><span id="openText">Verificando horário…</span></span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <svg class="cafe-scene" viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="380" height="340" rx="10" fill="#F3E4CE"/>
+        <rect x="30" y="30" width="320" height="150" rx="6" fill="#3B2A1E"/>
+        <rect x="42" y="42" width="130" height="126" rx="4" fill="#E3A73B" opacity="0.85"/>
+        <rect x="184" y="42" width="130" height="126" rx="4" fill="#C1613D" opacity="0.55"/>
+        <rect x="0" y="180" width="380" height="14" fill="#9C4A2E"/>
+        <g stroke="#9C4A2E" stroke-width="10">
+          <path d="M20 180 L40 150" /><path d="M80 180 L100 150" /><path d="M140 180 L160 150" />
+          <path d="M220 180 L240 150" /><path d="M280 180 L300 150" /><path d="M340 180 L360 150" />
+        </g>
+        <circle cx="200" cy="250" r="46" fill="#3B2A1E"/>
+        <ellipse cx="200" cy="235" rx="30" ry="20" fill="#F3E4CE"/>
+        <path d="M170 235 Q200 218 230 235" stroke="#6B5847" stroke-width="3" fill="none"/>
+        <path d="M244 232 q14 -4 12 12 q-2 12 -16 12" stroke="#3B2A1E" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <g fill="#7C8C63">
+          <ellipse cx="320" cy="270" rx="10" ry="28"/>
+          <ellipse cx="300" cy="280" rx="8" ry="20"/>
+          <ellipse cx="336" cy="282" rx="8" ry="20"/>
+        </g>
+        <rect x="290" y="290" width="60" height="30" rx="4" fill="#9C4A2E"/>
+      </svg>
+      <div class="chalk-card">
+        <div class="pin"></div>
+        <h4>Hoje tem ☕</h4>
+        <ul>
+          <li><span>Pão na chapa</span><span>R$ 9</span></li>
+          <li><span>Café coado 300ml</span><span>R$ 8</span></li>
+          <li><span>Bolo de fubá</span><span>R$ 7</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sobre" id="sobre">
+  <div class="wrap sobre-grid">
+    <div class="sobre-art reveal">
+      <svg viewBox="0 0 400 320" width="100%" height="100%">
+        <rect width="400" height="320" fill="#3B2A1E"/>
+        <rect x="0" y="220" width="400" height="100" fill="#2C1F16"/>
+        <g fill="#E3A73B" opacity="0.9">
+          <rect x="40" y="60" width="8" height="140" rx="2"/>
+          <rect x="352" y="60" width="8" height="140" rx="2"/>
+        </g>
+        <rect x="40" y="60" width="320" height="10" fill="#E3A73B"/>
+        <g fill="#C1613D" opacity="0.5">
+          <rect x="70" y="90" width="60" height="90" rx="4"/>
+          <rect x="170" y="90" width="60" height="90" rx="4"/>
+          <rect x="270" y="90" width="60" height="90" rx="4"/>
+        </g>
+        <g fill="#7C8C63">
+          <ellipse cx="200" cy="230" rx="18" ry="40"/>
+        </g>
+      </svg>
+    </div>
+    <div class="sobre-text reveal">
+      <span class="eyebrow">Nossa história</span>
+      <h2>Uma casa antiga virou o café favorito do bairro</h2>
+      <p>A Aurora começou em 2019, na casa dos avós da Marina, quando ela decidiu transformar a sala da frente num café pra vizinhança. Hoje é ponto de encontro de quem mora, trabalha e estuda por aqui.</p>
+      <p>Torramos o café com produtores da região, assamos pão todo dia de manhã e guardamos sempre uma mesa perto da janela pra quem chega sozinho com um livro.</p>
+      <div class="sobre-tags">
+        <span class="tag">Torra local</span>
+        <span class="tag">Pães do dia</span>
+        <span class="tag">Pet friendly</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cardapio" id="cardapio">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Cardápio</span>
+      <h2>O que pedir na Aurora</h2>
+      <p>Uma seleção do que sai mais da cozinha — o cardápio completo está no balcão.</p>
+    </div>
+    <div class="menu-cols">
+      <div class="menu-col reveal">
+        <h3>Cafés</h3>
+        <div class="menu-item"><span class="name">Café coado<span class="desc">Torra da casa, 300ml</span></span><span class="price">R$ 8</span></div>
+        <div class="menu-item"><span class="name">Cappuccino<span class="desc">Espuma cremosa, canela</span></span><span class="price">R$ 12</span></div>
+        <div class="menu-item"><span class="name">Espresso duplo<span class="desc">Encorpado, sem açúcar</span></span><span class="price">R$ 9</span></div>
+        <div class="menu-item"><span class="name">Mocha gelado<span class="desc">Chocolate 70%, gelo</span></span><span class="price">R$ 14</span></div>
+      </div>
+      <div class="menu-col reveal">
+        <h3>Comidas</h3>
+        <div class="menu-item"><span class="name">Pão na chapa<span class="desc">Manteiga de garrafa</span></span><span class="price">R$ 9</span></div>
+        <div class="menu-item"><span class="name">Omelete da casa<span class="desc">Queijo, tomate seco</span></span><span class="price">R$ 18</span></div>
+        <div class="menu-item"><span class="name">Tábua de frios<span class="desc">Serve 2 pessoas</span></span><span class="price">R$ 39</span></div>
+        <div class="menu-item"><span class="name">Sanduíche de queijo quente<span class="desc">Pão de fermentação natural</span></span><span class="price">R$ 16</span></div>
+      </div>
+      <div class="menu-col reveal">
+        <h3>Doces</h3>
+        <div class="menu-item"><span class="name">Bolo de fubá<span class="desc">Fatia com goiabada</span></span><span class="price">R$ 7</span></div>
+        <div class="menu-item"><span class="name">Brownie<span class="desc">Com nozes</span></span><span class="price">R$ 8</span></div>
+        <div class="menu-item"><span class="name">Torta de limão<span class="desc">Fatia individual</span></span><span class="price">R$ 10</span></div>
+        <div class="menu-item"><span class="name">Cookie de aveia<span class="desc">Feito na hora</span></span><span class="price">R$ 6</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="horario" id="horario">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Horário &amp; localização</span>
+      <h2>Quando e onde nos encontrar</h2>
+    </div>
+    <div class="horario-grid">
+      <div class="hours-board reveal">
+        <div class="hours-row"><span class="day">Segunda a sexta</span><span class="time">7h – 19h</span></div>
+        <div class="hours-row"><span class="day">Sábado</span><span class="time">8h – 15h</span></div>
+        <div class="hours-row"><span class="day">Domingo</span><span class="time">8h – 14h</span></div>
+      </div>
+      <div class="local-card reveal">
+        <address>
+          <b>Café Aurora</b>
+          Rua das Acácias, 120 — Jardim Acácias<br>
+          Belo Horizonte, MG
+        </address>
+        <a href="https://github.com/JuIsabelle" target="_blank" rel="noopener">
+          <button class="btn-primary" style="width:100%;">Como chegar</button>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="depoimentos">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Quem frequenta</span>
+      <h2>O que dizem os vizinhos</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi reveal">
+        <p>"Trabalho de lá umas duas vezes por semana. O wi-fi é bom e ninguém apressa você a sair depois do café."</p>
+        <div class="who">Renata, designer, mora no bairro</div>
+      </div>
+      <div class="testi reveal">
+        <p>"O pão na chapa da Aurora é minha parada obrigatória antes do trabalho. Sempre o mesmo carinho no atendimento."</p>
+        <div class="who">Diego, vizinho de longa data</div>
+      </div>
+      <div class="testi reveal">
+        <p>"Levo meu cachorro toda sexta e sempre tem um biscoitinho esperando ele no balcão."</p>
+        <div class="who">Camila, cliente desde 2020</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <div class="wrap">
+    <h2>Te esperamos na mesa da janela.</h2>
+    <p>Reserve seu lugar ou passe sem avisar — sempre cabe mais um.</p>
+    <button class="btn-primary">Fazer reserva</button>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="https://github.com/JuIsabelle" class="logo">Café Aurora</a>
+        <p>Café, pão quente e conversa boa no Jardim Acácias, Belo Horizonte.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="https://github.com/JuIsabelle">Sobre</a></li>
+          <li><a href="https://github.com/JuIsabelle">Cardápio</a></li>
+          <li><a href="https://github.com/JuIsabelle">Horário &amp; local</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="https://github.com/JuIsabelle">oi@cafeteriatrigo.com.br</a></li>
+          <li><a href="https://github.com/JuIsabelle">Instagram</a></li>
+          <li><a href="https://github.com/JuIsabelle">(31) 3322-4455</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Café Aurora — negócio fictício, criado para fins de estudo.</span>
+      <span class="badge">Hospedado na AWS S3 · Projeto de portfólio</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Open/closed badge based on local browser time
+  (function(){
+    const badge = document.getElementById('openBadge');
+    const text = document.getElementById('openText');
+    const now = new Date();
+    const day = now.getDay(); // 0 = domingo
+    const hour = now.getHours() + now.getMinutes()/60;
+    let open = false;
+    if (day >= 1 && day <= 5) open = hour >= 7 && hour < 19;
+    else if (day === 6) open = hour >= 8 && hour < 15;
+    else open = hour >= 8 && hour < 14;
+    if (open) { text.textContent = 'Aberto agora'; }
+    else { text.textContent = 'Fechado no momento'; badge.classList.add('closed'); }
+  })();
+</script>
+
+</body>
+</html>
